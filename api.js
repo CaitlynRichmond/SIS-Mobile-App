@@ -46,7 +46,10 @@ class SISApi {
 
   // Individual API routes
 
-  /** Gets all lecutre sessions for the cohort **/
+  /** Gets all lecture sessions for the cohort 
+   * Returns: { count, next, previous, results }
+   * where results: { id, title, status, api_url } 
+   */
   static async getLectureSessions() {
     let res = await this.request(`/lecturesesssions/`);
     return res.results;
