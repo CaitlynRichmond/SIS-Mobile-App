@@ -84,7 +84,7 @@ class SISApi {
 
       responses = responses.filter((r) => new Date(r.start_at) > now);
     }
-    console.log(responses.sort(this._sortByDate));
+
     return responses.sort(this._sortByDate);
   }
 
