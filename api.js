@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:8000/api";
+const BASE_URL = "http://localhost:8000/api";
 
 /** API Class.
  *
@@ -13,12 +13,14 @@ class SISApi {
   // We're providing a token you can use to interact with the backend API
   // DON'T MODIFY THIS TOKEN
   static token ="d64f4e1f88ede5b873d02403ce279c944517bad5";
-
   static async request(endpoint, data = {}, method = "GET") {
+
     const url = new URL(`${BASE_URL}/${endpoint}`);
+    console.log(url, "URL HERE")
     const headers = {
-      Authorization: `Token ${SISApi.token}`,
+      "Authorization": `Token ${SISApi.token}`,
       "content-type": "application/json",
+      "Accept": "application/json",
     };
 
     url.search = method === "GET" ? new URLSearchParams(data).toString() : "";
@@ -46,12 +48,13 @@ class SISApi {
 
   // Individual API routes
 
-  /** Gets all lecture sessions for the cohort 
+  /** Gets all lecture sessions for the cohort
    * Returns: { count, next, previous, results }
-   * where results: { id, title, status, api_url } 
+   * where results: { id, title, status, api_url }
    */
   static async getLectureSessions() {
-    let res = await this.request(`/lecturesesssions/`);
+    let res = await this.request('lecturesessions/')
+
     return res.results;
   }
 

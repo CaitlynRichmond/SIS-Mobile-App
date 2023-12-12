@@ -5,10 +5,10 @@ import {
 } from 'react-native';
 
 /** Presentational component for a LectureSessionCard
- * 
+ *
  * Props:
  * - lectureSession: { id, title, status, api_url }
- * 
+ *
  * LectureSessionList -> LectureSessionCard
  */
 
