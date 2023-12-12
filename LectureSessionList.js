@@ -1,5 +1,5 @@
-import { View, FlatList, Text } from "react-native";
-import { useState, useEffect } from 'react';
+import { View, FlatList, Text, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
 import SISApi from "./api";
 import LectureSessionCard from "./LectureSessionCard";
 
@@ -19,12 +19,8 @@ export default function LectureSessionList() {
   /** Get all lectureSessions from the API */
 
   async function fetchLectureSessions() {
-    const lectureSessions = await SISApi.getLectureSessions();
-    lectureDetails = lectureSessions.map(ls => ls.api_url )
+    const lectureSessions = await SISApi.getDetailedLectureSessions(true);
     setLectureSessions(lectureSessions);
-    console.log("LectureSessionList. updating lectureSessions=", lectureSessions);
-
-
   }
 
   /** Effect for getting all companies on initial render. */
@@ -38,16 +34,27 @@ export default function LectureSessionList() {
       <View>
         <Text>Loading...</Text>
       </View>
-    )
+    );
   }
 
   return (
     <View>
       <FlatList
         data={lectureSessions}
-        renderItem={({item})=> <LectureSessionCard lectureSession={item} />}
-        keyExtractor={ls => ls.id}
+        renderItem={({ item }) => <LectureSessionCard lectureSession={item} />}
+        keyExtractor={(ls) => ls.id}
+        ListHeaderComponent={() => <Text style={styles.header}>Upcoming</Text>}
       />
     </View>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    fontSize: 64,
+    fontFamily: "Source-Serif",
+    color: "black",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+});

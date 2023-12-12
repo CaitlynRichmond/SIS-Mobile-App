@@ -12,15 +12,13 @@ class SISApi {
   // Remember, the backend needs to be authorized with a token
   // We're providing a token you can use to interact with the backend API
   // DON'T MODIFY THIS TOKEN
-  static token ="d64f4e1f88ede5b873d02403ce279c944517bad5";
+  static token = "d64f4e1f88ede5b873d02403ce279c944517bad5";
   static async request(endpoint, data = {}, method = "GET") {
-
     const url = new URL(`${BASE_URL}/${endpoint}`);
-    console.log(url, "URL HERE")
     const headers = {
-      "Authorization": `Token ${SISApi.token}`,
+      Authorization: `Token ${SISApi.token}`,
       "content-type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     };
 
     url.search = method === "GET" ? new URLSearchParams(data).toString() : "";
@@ -53,68 +51,113 @@ class SISApi {
    * where results: { id, title, status, api_url }
    */
   static async getLectureSessions() {
-    let res = await this.request('lecturesessions/')
+    const res = await this.request("lecturesessions/");
 
     return res.results;
   }
 
-//   /** Get details on all companies that match search*/
-//   static async getCompanies(search) {
-//     let res = await this.request(
-//       `companies`,
-//       search ? { nameLike: search } : {}
-//     );
+  /** Gets all lecture sessions for the cohort
+   * Returns: { id, lecture, title, description, cohort, dri, staff,
+   *            week_group, start_at, end_at, asset_set, status, api_url }
+   */
+  static async getLectureSessionById(id) {
+    const res = await this.request(`lecturesessions/${id}`);
 
-//     return res.companies;
-//   }
+    return res;
+  }
 
-//   /** Get details on all jobs that match search*/
-//   static async getJobs(search) {
-//     let res = await this.request(`jobs`, search ? { title: search } : {});
+  /** Gets all lecture session details
+   * Returns: [{ id, lecture, title, description, cohort, dri, staff,
+   *            week_group, start_at, end_at, asset_set, status, api_url }, ...]
+   */
+  static async getDetailedLectureSessions(upcoming = false) {
+    const lectureSessions = await this.getLectureSessions();
 
-//     return res.jobs;
-//   }
+    const lectureSessionDetailPromises = lectureSessions.map((ls) =>
+      this.getLectureSessionById(ls.id)
+    );
 
-//   /**Login and returns token or errors if bad username/password */
-//   static async login(username, password) {
-//     let res = await this.request(`auth/token`, { username, password }, "POST");
+    let responses = await Promise.all(lectureSessionDetailPromises);
 
-//     return res.token;
-//   }
+    if (upcoming) {
+      const now = new Date();
 
-//   /**Signup and returns token or errors if bad inputs */
+      responses = responses.filter((r) => new Date(r.start_at) > now);
+    }
+    console.log(responses.sort(this._sortByDate));
+    return responses.sort(this._sortByDate);
+  }
 
-//   static async signup(username, password, firstName, lastName, email) {
-//     let res = await this.request(
-//       `auth/register`,
-//       { username, password, firstName, lastName, email },
-//       "POST"
-//     );
+  static _sortByDate(a, b) {
+    const aDate = new Date(a.start_at);
+    const bDate = new Date(b.start_at);
 
-//     return res.token;
-//   }
+    let comparison = 0;
+    if (aDate > bDate) {
+      comparison = 1;
+    } else if (aDate < bDate) {
+      comparison = -1;
+    }
+    return comparison;
+  }
 
-//   /**Get information on user */
-//   static async getUser(username) {
-//     let res = await this.request(`users/${username}`);
+  //   /** Get details on all companies that match search*/
+  //   static async getCompanies(search) {
+  //     let res = await this.request(
+  //       `companies`,
+  //       search ? { nameLike: search } : {}
+  //     );
 
-//     return res.user;
-//   }
+  //     return res.companies;
+  //   }
 
-//   /**Patch user info */
-//   static async updateUser(formData) {
-//     const username = formData.username;
-//     delete formData.username;
+  //   /** Get details on all jobs that match search*/
+  //   static async getJobs(search) {
+  //     let res = await this.request(`jobs`, search ? { title: search } : {});
 
-//     let res = await this.request(`users/${username}`, { ...formData }, "PATCH");
+  //     return res.jobs;
+  //   }
 
-//     return res.user;
-//   }
+  //   /**Login and returns token or errors if bad username/password */
+  //   static async login(username, password) {
+  //     let res = await this.request(`auth/token`, { username, password }, "POST");
 
-//   /**Applies to job */
-//   static async applyToJob(username, jobId) {
-//     await this.request(`users/${username}/jobs/${jobId}`, {}, "POST");
-//   }
-// }
+  //     return res.token;
+  //   }
+
+  //   /**Signup and returns token or errors if bad inputs */
+
+  //   static async signup(username, password, firstName, lastName, email) {
+  //     let res = await this.request(
+  //       `auth/register`,
+  //       { username, password, firstName, lastName, email },
+  //       "POST"
+  //     );
+
+  //     return res.token;
+  //   }
+
+  //   /**Get information on user */
+  //   static async getUser(username) {
+  //     let res = await this.request(`users/${username}`);
+
+  //     return res.user;
+  //   }
+
+  //   /**Patch user info */
+  //   static async updateUser(formData) {
+  //     const username = formData.username;
+  //     delete formData.username;
+
+  //     let res = await this.request(`users/${username}`, { ...formData }, "PATCH");
+
+  //     return res.user;
+  //   }
+
+  //   /**Applies to job */
+  //   static async applyToJob(username, jobId) {
+  //     await this.request(`users/${username}/jobs/${jobId}`, {}, "POST");
+  //   }
+  // }
 }
 export default SISApi;
