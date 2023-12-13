@@ -29,9 +29,9 @@ class SISApi {
     //fetch API does not throw an error, have to dig into the resp for msgs
     if (!resp.ok) {
       console.error("API Error:", resp.statusText, resp.status);
-      const errors = await resp.json();
-      console.log(errors);
-      throw [errors];
+      const error = await resp.json();
+
+      throw error;
     }
 
     return await resp.json();

@@ -23,20 +23,27 @@ export default function LoginForm({ login }) {
       await login(email, password, cohort);
     } catch (errors) {
       setLoginErrors(errors);
-      console.log("Setting loginErrors=", loginErrors);
     }
     // console.log(email, password, cohort)
     // await login(email, password, cohort);
   }
+  console.log("Setting loginErrors=", loginErrors);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {/* { loginErrors.length === 0 && (
+      {/* { loginErrors.length !== 0 && (
         <View>
           {loginErrors.map(error => <Text>{error}</Text>)}
         </View>
       )} */}
+
+      {loginErrors.non_field_errors !== 0 && (
+        <View>{<Text>{loginErrors.non_field_errors}</Text>}</View>
+      )}
+        {loginErrors.username !== 0 && (
+        <View>{<Text>{loginErrors.username}</Text>}</View>
+      )}
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
@@ -45,6 +52,10 @@ export default function LoginForm({ login }) {
           onChangeText={(email) => setEmail(email)}
         />
       </View>
+
+      {loginErrors.password !== 0 && (
+        <View>{<Text>{loginErrors.password}</Text>}</View>
+      )}
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
@@ -54,6 +65,7 @@ export default function LoginForm({ login }) {
           onChangeText={(password) => setPassword(password)}
         />
       </View>
+
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}

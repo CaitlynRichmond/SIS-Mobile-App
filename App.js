@@ -19,8 +19,6 @@ export default function App() {
 
   /**Logs in user */
   async function login(email, password, cohort) {
-    console.log(cohort, "Cohort");
-    console.log(token);
     const token = await SISApi.getToken(
       COHORT_ID_TO_URL[cohort],
       email,
