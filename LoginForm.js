@@ -13,7 +13,7 @@ export default function LoginForm({ login }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cohort, setCohort] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
 
   function handleSubmit(evt) {
@@ -31,30 +31,34 @@ export default function LoginForm({ login }) {
   }, [email, password]);
 
   const validateForm = () => {
-    let errors = {};
 
     // Validate email field
     if (!email) {
-      errors.email = "Email is required.";
+      setErrors(currentErrors => [...currentErrors, "Email is required."]);
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Email is invalid.";
+      setErrors(currentErrors => [...currentErrors, "Email is invalid."]);
     }
 
     // Validate password field
-    if (!password) {
-      errors.password = "Password is required.";
-    } else if (password.length < 6) {
-      errors.password = "Password must be at least 6 characters.";
-    }
+    // if (!password) {
+    //   errors.password = "Password is required.";
+    // } else if (password.length < 6) {
+    //   errors.password = "Password must be at least 6 characters.";
+    // }
 
     // Set the errors and update form validity
-    setErrors(errors);
+
     setIsFormValid(Object.keys(errors).length === 0);
   };
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      { errors.length === 0 && (
+        <View>
+          {errors.map(error => <Text>{error}</Text>)}
+        </View>
+      )}
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
