@@ -13,12 +13,19 @@ class SISApi {
 
   static async request(endpoint, data = {}, method = "GET") {
     const url = new URL(`${this.BASE_URL}/${endpoint}`);
-    const headers = {
-      Authorization: `Token ${SISApi.token}`,
-      "content-type": "application/json",
-      Accept: "application/json",
-    };
-
+    let headers;
+    if (endpoint !== "-token") {
+      headers = {
+        Authorization: `Token ${SISApi.token}`,
+        "content-type": "application/json",
+        Accept: "application/json",
+      };
+    } else {
+      headers = {
+        "content-type": "application/json",
+        Accept: "application/json",
+      };
+    }
     url.search = method === "GET" ? new URLSearchParams(data).toString() : "";
 
     // set to undefined since the body property cannot exist on a GET method
@@ -105,7 +112,7 @@ class SISApi {
     console.log("BASE_URL", this.BASE_URL);
     const info = { username, password };
     const res = await this.request(`-token`, (data = info), (method = "POST"));
-
+    console.log("THE RESPONSE HERE", res);
     this.token = res.token;
 
     return res.token;
