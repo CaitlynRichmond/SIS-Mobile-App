@@ -1,5 +1,3 @@
-const BASE_URL = "http://localhost:8000/api";
-
 /** API Class.
  *
  * Static class tying together methods used to get/send to to the API.
@@ -9,12 +7,13 @@ const BASE_URL = "http://localhost:8000/api";
  */
 
 class SISApi {
-  // Remember, the backend needs to be authorized with a token
-  // We're providing a token you can use to interact with the backend API
-  // DON'T MODIFY THIS TOKEN
+
+  static BASE_URL = "http://localhost:8000/api";
+
   static token = "d64f4e1f88ede5b873d02403ce279c944517bad5";
+
   static async request(endpoint, data = {}, method = "GET") {
-    const url = new URL(`${BASE_URL}/${endpoint}`);
+    const url = new URL(`${this.BASE_URL}/${endpoint}`);
     const headers = {
       Authorization: `Token ${SISApi.token}`,
       "content-type": "application/json",
@@ -101,6 +100,19 @@ class SISApi {
     return comparison;
   }
 
+  /** Gets token for user based on login
+   * Takes: cohortId, username, password
+   */
+  static async getToken(cohortUrl, username, password) {
+    this.BASE_URL = cohortUrl + "/api";
+    console.log("BASE_URL", this.BASE_URL);
+    const info = { username, password };
+    const res = await this.request(`-token`, (data = info), (method = "POST"));
+
+    this.token = res.token;
+
+    return res.token;
+  }
   //   /** Get details on all companies that match search*/
   //   static async getCompanies(search) {
   //     let res = await this.request(
