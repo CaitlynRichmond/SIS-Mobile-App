@@ -9,56 +9,33 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+
+/** */
 export default function LoginForm({ login }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cohort, setCohort] = useState("");
-  const [errors, setErrors] = useState([]);
-  const [isFormValid, setIsFormValid] = useState(false);
+
+  console.log("")
+  const [loginErrors, setLoginErrors] = useState([]);
 
   function handleSubmit(evt) {
-    if (isFormValid) {
+    try {
       login(email, password, cohort);
-    } else {
-      console.log("Form has errors. Please correct them.");
+    } catch (errors) {
+      setLoginErrors(errors);
+      console.log("Setting loginErrors=", loginErrors);
     }
   }
-
-  useEffect(() => {
-    // Trigger form validation when name,
-    // email, or password changes
-    validateForm();
-  }, [email, password]);
-
-  const validateForm = () => {
-
-    // Validate email field
-    if (!email) {
-      setErrors(currentErrors => [...currentErrors, "Email is required."]);
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setErrors(currentErrors => [...currentErrors, "Email is invalid."]);
-    }
-
-    // Validate password field
-    // if (!password) {
-    //   errors.password = "Password is required.";
-    // } else if (password.length < 6) {
-    //   errors.password = "Password must be at least 6 characters.";
-    // }
-
-    // Set the errors and update form validity
-
-    setIsFormValid(Object.keys(errors).length === 0);
-  };
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      { errors.length === 0 && (
+      {/* { loginErrors.length === 0 && (
         <View>
-          {errors.map(error => <Text>{error}</Text>)}
+          {loginErrors.map(error => <Text>{error}</Text>)}
         </View>
-      )}
+      )} */}
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
