@@ -19,13 +19,14 @@ export default function LoginForm({ login }) {
   const [loginErrors, setLoginErrors] = useState([]);
 
   async function handleSubmit(evt) {
-    // try {
-    //   await login(email, password, cohort);
-    // } catch (errors) {
-    //   setLoginErrors(errors);
-    //   console.log("Setting loginErrors=", loginErrors);
-    // }
-    await login(email, password, cohort);
+    try {
+      await login(email, password, cohort);
+    } catch (errors) {
+      setLoginErrors(errors);
+      console.log("Setting loginErrors=", loginErrors);
+    }
+    // console.log(email, password, cohort)
+    // await login(email, password, cohort);
   }
 
   return (
@@ -49,7 +50,7 @@ export default function LoginForm({ login }) {
           style={styles.TextInput}
           placeholder="Password"
           placeholderTextColor="#003f5c"
-          // secureTextEntry={true}
+          secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />
       </View>

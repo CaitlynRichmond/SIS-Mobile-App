@@ -1,4 +1,3 @@
-
 /** API Class.
  *
  * Static class tying together methods used to get/send to to the API.
@@ -8,8 +7,7 @@
  */
 
 class SISApi {
-
-  static BASE_URL = "http://localhost:8000/api";
+  static BASE_URL = "calm-sheep-serve.loca.lt";
 
   static token = "d64f4e1f88ede5b873d02403ce279c944517bad5";
 
@@ -31,14 +29,9 @@ class SISApi {
     //fetch API does not throw an error, have to dig into the resp for msgs
     if (!resp.ok) {
       console.error("API Error:", resp.statusText, resp.status);
-      const { error } = await resp.json();
-
-      if (Array.isArray(error.message)) {
-        throw error.message;
-      } else {
-        console.log(error.message);
-        throw [error.message];
-      }
+      const errors = await resp.json();
+      console.log(errors);
+      throw [errors];
     }
 
     return await resp.json();
