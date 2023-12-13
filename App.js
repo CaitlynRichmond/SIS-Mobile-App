@@ -6,6 +6,11 @@ import { useFonts } from "expo-font";
 import SISApi from "./api";
 import { useState } from "react";
 
+const COHORT_ID_TO_URL = {
+  R99: "http://localhost:8000",
+};
+
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     "Source-Serif": require("./assets/fonts/SourceSerif4-Regular.ttf"),
@@ -15,12 +20,9 @@ export default function App() {
 
   /**Logs in user */
   async function login(email, password, cohort) {
-    console.log("LOGGING IN MAYBE");
-    cohortIdToUrl = {
-      R99: "http://localhost:8000",
-    };
+
     console.log(cohort, "Cohort");
-    const token = await SISApi.getToken(cohortIdToUrl[cohort], email, password);
+    const token = await SISApi.getToken(COHORT_ID_TO_URL[cohort], email, password);
     setToken(token);
   }
 
