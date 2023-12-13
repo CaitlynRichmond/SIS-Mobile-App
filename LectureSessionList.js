@@ -11,7 +11,7 @@ import LectureSessionCard from "./LectureSessionCard";
  * App -> LectureList
  */
 
-export default function LectureSessionList() {
+export default function LectureSessionList({ navigation }) {
   const [lectureSessions, setLectureSessions] = useState(null);
 
   // console.log("LectureSessionList rendering. lectureSessions=", lectureSessions);

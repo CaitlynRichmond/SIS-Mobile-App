@@ -1,3 +1,7 @@
+const COHORT_ID_TO_URL = {
+  R99: process.env.EXPO_PUBLIC_API_URL,
+};
+
 /** API Class.
  *
  * Static class tying together methods used to get/send to to the API.
@@ -11,21 +15,20 @@ class SISApi {
 
   static token = null;
 
+  static COHORT_ID_TO_URL = COHORT_ID_TO_URL;
+
   static async request(endpoint, data = {}, method = "GET") {
     const url = new URL(`${this.BASE_URL}/${endpoint}`);
-    let headers;
+
+    let headers = {
+      "content-type": "application/json",
+      Accept: "application/json",
+    };
+
     if (endpoint !== "-token") {
-      headers = {
-        Authorization: `Token ${SISApi.token}`,
-        "content-type": "application/json",
-        Accept: "application/json",
-      };
-    } else {
-      headers = {
-        "content-type": "application/json",
-        Accept: "application/json",
-      };
-    }
+      headers.Authorization = `Token ${SISApi.token}`;
+    } 
+
     url.search = method === "GET" ? new URLSearchParams(data).toString() : "";
 
     // set to undefined since the body property cannot exist on a GET method
@@ -105,10 +108,10 @@ class SISApi {
   /** Gets token for user based on login
    * Takes: cohortId, username, password
    */
-  static async getToken(cohortUrl, username, password) {
+  static async getToken(cohort, username, password) {
     console.log("logging in, username=", username);
     console.log("logging in, password=", password);
-    this.BASE_URL = cohortUrl + "/api";
+    this.BASE_URL = COHORT_ID_TO_URL[cohort] + "/api";
     console.log("BASE_URL", this.BASE_URL);
     const info = { username, password };
     const res = await this.request(`-token`, (data = info), (method = "POST"));

@@ -1,14 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import LectureSessionList from "./LectureSessionList";
 import LoginForm from "./LoginForm";
 import { useFonts } from "expo-font";
 import SISApi from "./api";
 import { useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Homepage from "./Homepage";
+import LectureDetail from "./LectureDetail";
 
-const COHORT_ID_TO_URL = {
-  R99: process.env.EXPO_PUBLIC_API_URL,
-};
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -16,15 +16,17 @@ export default function App() {
   });
 
   const [token, setToken] = useState(null);
+  const [cohort, setCohort] = useState(null);
 
   /**Logs in user */
   async function login(email, password, cohort) {
     const token = await SISApi.getToken(
-      COHORT_ID_TO_URL[cohort],
+      cohort,
       email,
       password
     );
     setToken(token);
+    setCohort(cohort);
   }
 
   if (!fontsLoaded) {
@@ -39,10 +41,19 @@ export default function App() {
     );
   }
 
+  const Stack = createNativeStackNavigator();
+
   return (
-    <View style={styles.container}>
-      <LectureSessionList />
-    </View>
+    <NavigationContainer>
+
+      <Stack.Navigator>
+        <Stack.Screen name={`Welcome ${cohort}`} component={Homepage} />
+        <Stack.Screen name="Lecture">
+          {(props) => <LectureDetail {...props} />}
+        </Stack.Screen>
+      </Stack.Navigator>
+
+    </NavigationContainer>
   );
 }
 
@@ -54,3 +65,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+

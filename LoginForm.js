@@ -1,3 +1,4 @@
+import SISApi from "./api";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
@@ -9,6 +10,8 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import { SelectList } from 'react-native-dropdown-select-list'
+
 
 /** */
 export default function LoginForm({ login }) {
@@ -28,6 +31,7 @@ export default function LoginForm({ login }) {
     // await login(email, password, cohort);
   }
   console.log("Setting loginErrors=", loginErrors);
+  console.log("Setting cohort=", cohort);
 
   return (
     <View style={styles.container}>
@@ -50,6 +54,7 @@ export default function LoginForm({ login }) {
           placeholder="Email"
           placeholderTextColor="#003f5c"
           onChangeText={(email) => setEmail(email)}
+          autoCapitalize="none"
         />
       </View>
 
@@ -63,16 +68,30 @@ export default function LoginForm({ login }) {
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
+          autoCapitalize="none"
         />
       </View>
 
       <View style={styles.inputView}>
-        <TextInput
+        {/* <TextInput
           style={styles.TextInput}
-          placeholder="Cohort Id"
+          placeholder="Cohort"
           placeholderTextColor="#003f5c"
           onChangeText={(cohort) => setCohort(cohort)}
         />
+      </View> */}
+        <SelectList 
+          data={Object.keys(SISApi.COHORT_ID_TO_URL)}
+          setSelected={(cohort) => setCohort(cohort)}
+          search={false}
+          inputStyles={styles.TextInput}
+          dropdownStyles={{
+            backgroundColor: "white",
+            position: "absolute",
+            top: 40,
+            width: "100%",
+            zIndex: 999,
+          }}/>
       </View>
       <TouchableOpacity onPress={handleSubmit} style={styles.loginBtn}>
         <Text>LOGIN</Text>
