@@ -7,9 +7,9 @@
  */
 
 class SISApi {
-  static BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+  static BASE_URL = process.env.EXPO_PUBLIC_API_URL + "/api";
 
-  static token = "d64f4e1f88ede5b873d02403ce279c944517bad5";
+  static token = null;
 
   static async request(endpoint, data = {}, method = "GET") {
     const url = new URL(`${this.BASE_URL}/${endpoint}`);
