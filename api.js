@@ -99,6 +99,8 @@ class SISApi {
    * Takes: cohortId, username, password
    */
   static async getToken(cohortUrl, username, password) {
+    console.log("logging in, username=", username);
+    console.log("logging in, password=", password);
     this.BASE_URL = cohortUrl + "/api";
     console.log("BASE_URL", this.BASE_URL);
     const info = { username, password };
