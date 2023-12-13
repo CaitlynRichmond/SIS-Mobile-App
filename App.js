@@ -7,7 +7,7 @@ import SISApi from "./api";
 import { useState } from "react";
 
 const COHORT_ID_TO_URL = {
-  R99: "calm-sheep-serve.loca.lt",
+  R99: process.env.EXPO_PUBLIC_API_URL,
 };
 
 export default function App() {
@@ -20,6 +20,7 @@ export default function App() {
   /**Logs in user */
   async function login(email, password, cohort) {
     console.log(cohort, "Cohort");
+    console.log(token);
     const token = await SISApi.getToken(
       COHORT_ID_TO_URL[cohort],
       email,
@@ -32,13 +33,13 @@ export default function App() {
     return null;
   }
 
-  // if (token === null) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <LoginForm login={login} />
-  //     </View>
-  //   );
-  // }
+  if (token === null) {
+    return (
+      <View style={styles.container}>
+        <LoginForm login={login} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

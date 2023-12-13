@@ -7,7 +7,7 @@
  */
 
 class SISApi {
-  static BASE_URL = "calm-sheep-serve.loca.lt";
+  static BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
   static token = "d64f4e1f88ede5b873d02403ce279c944517bad5";
 
@@ -64,7 +64,8 @@ class SISApi {
    *            week_group, start_at, end_at, asset_set, status, api_url }, ...]
    */
   static async getDetailedLectureSessions(upcoming = false) {
-    const lectureSessions = await this.getLectureSessions();
+    let lectureSessions = await this.getLectureSessions();
+    // lectureSessions = lectureSessions.filter((ls) => ls.id === 5);
 
     const lectureSessionDetailPromises = lectureSessions.map((ls) =>
       this.getLectureSessionById(ls.id)
