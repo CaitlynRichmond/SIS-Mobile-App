@@ -8,6 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Homepage from "./Homepage";
 import LectureDetail from "./LectureDetail";
+import LectureSessionList from "./LectureSessionList";
 
 
 export default function App() {
@@ -48,9 +49,7 @@ export default function App() {
 
       <Stack.Navigator>
         <Stack.Screen name={`Welcome ${cohort}`} component={Homepage} />
-        <Stack.Screen name="Lecture">
-          {(props) => <LectureDetail {...props} />}
-        </Stack.Screen>
+        <Stack.Screen name="Lecture" component={LectureSessionList} />
       </Stack.Navigator>
 
     </NavigationContainer>

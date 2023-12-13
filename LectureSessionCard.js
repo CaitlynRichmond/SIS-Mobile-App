@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 
 /** Presentational component for a LectureSessionCard
  *
@@ -8,7 +8,7 @@ import { View, Text, StyleSheet } from "react-native";
  * LectureSessionList -> LectureSessionCard
  */
 
-export default function LectureSessionCard({ lectureSession }) {
+export default function LectureSessionCard({ lectureSession, navigate }) {
   const options = { month: "short", day: "numeric" };
   return (
     <View style={styles.item}>
@@ -20,6 +20,10 @@ export default function LectureSessionCard({ lectureSession }) {
       </Text>
       <Text style={styles.title}>{lectureSession.title}</Text>
       <Text style={styles.description}>{lectureSession.description}</Text>
+      <Button
+        title="Detail"
+        onPress={() => navigation.navigate('Lecture')}
+      />
     </View>
   );
 }

@@ -41,7 +41,11 @@ export default function LectureSessionList({ navigation }) {
     <View>
       <FlatList
         data={lectureSessions}
-        renderItem={({ item }) => <LectureSessionCard lectureSession={item} />}
+        renderItem={({ item }) => (
+          <LectureSessionCard 
+            lectureSession={item} 
+            navigate={navigate}/>
+          )}
         keyExtractor={(ls) => ls.id}
         ListHeaderComponent={() => <Text style={styles.header}>Upcoming</Text>}
       />
