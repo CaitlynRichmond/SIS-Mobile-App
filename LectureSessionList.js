@@ -45,13 +45,3 @@ export default function LectureSessionList({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    fontSize: 64,
-    fontFamily: "Source-Serif",
-    color: "black",
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-});
