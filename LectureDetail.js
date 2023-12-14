@@ -22,12 +22,10 @@ export default function LectureDetail({ route, navigation }) {
 
   async function fetchLecture() {
     const lectureSession = await SISApi.getLectureSessionByIdWithDRIInfo(id);
-    console.log(lectureSession.dri);
     setLecture(lectureSession);
   }
-  console.log(lecture)
-  /** Effect for getting all companies on initial render. */
 
+  /** Effect for getting all companies on initial render. */
   useEffect(function fetchLectureWhenMounted() {
     fetchLecture();
   }, []);
@@ -42,19 +40,15 @@ export default function LectureDetail({ route, navigation }) {
 
   return (
     <View style={styles.item}>
-      <Text style={styles.title}>{lecture.title}</Text>
-      <Text style={styles.description}>{lecture.description}</Text>
       <Text style={styles.date}>
-        {"\n"}
         {new Date(lecture.start_at).toLocaleString(undefined, startDate)} -{" "}
         {new Date(lecture.end_at).toLocaleString(undefined, endDate)}
       </Text>
-      <Text>
-        Instructor: {lecture.dri.first_name}
-      </Text>
-      <Image
-        source={{ url: lecture.dri.photo }}
-      />
+      <Text style={styles.title}>{lecture.title}</Text>
+      <Text style={styles.description}>{lecture.description}</Text>
+
+      <Image style={styles.image} source={{url:  lecture.dri.photo}} />
+
     </View>
   );
 }
@@ -63,6 +57,14 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 16,
     color: "white",
+  },
+  image: {
+    alignSelf: "center",
+    marginVertical: 10,
+    borderRadius: 100,
+    height: 100,
+    width: 100,
+
   },
   item: {
     backgroundColor: "#f86161",
