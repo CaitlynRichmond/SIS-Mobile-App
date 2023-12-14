@@ -23,7 +23,9 @@ export default function LectureDetail({ route, navigation }) {
   async function fetchDRIInfo() {
     let { lectureSession } = route.params;
     console.log("BEFORE lectureSession=", lectureSession)
-    lectureSession = await SISApi.addDRIInfoToLectureSession(lectureSession);
+    if (typeof lectureSession.dri === String) {
+      lectureSession = await SISApi.addDRIInfoToLectureSession(lectureSession);
+    }
     console.log("BEFORE lectureSession=", lectureSession)
     setLecture(lectureSession);
   }
