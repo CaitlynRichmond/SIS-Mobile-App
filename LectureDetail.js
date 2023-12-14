@@ -9,8 +9,8 @@ import SISApi from "./api";
  */
 
 export default function LectureDetail({ route, navigation }) {
+  
   const [lecture, setLecture] = useState(null);
-  const { id } = route.params;
 
   const startDate = {
     month: "short",
@@ -20,14 +20,17 @@ export default function LectureDetail({ route, navigation }) {
   };
   const endDate = { hour: "numeric", minute: "numeric" };
 
-  async function fetchLecture() {
-    const lectureSession = await SISApi.getLectureSessionByIdWithDRIInfo(id);
+  async function fetchDRIInfo() {
+    let { lectureSession } = route.params;
+    console.log("BEFORE lectureSession=", lectureSession)
+    lectureSession = await SISApi.addDRIInfoToLectureSession(lectureSession);
+    console.log("BEFORE lectureSession=", lectureSession)
     setLecture(lectureSession);
   }
 
   /** Effect for getting all companies on initial render. */
-  useEffect(function fetchLectureWhenMounted() {
-    fetchLecture();
+  useEffect(function fetchDRIInfoWhenMounted() {
+    fetchDRIInfo();
   }, []);
 
   if (lecture === null) {

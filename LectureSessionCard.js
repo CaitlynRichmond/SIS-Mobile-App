@@ -19,7 +19,7 @@ export default function LectureSessionCard({ lectureSession, navigation }) {
     <View style={styles.item}>
       <Pressable
         onPress={() =>
-          navigation.navigate("Lecture", { id: lectureSession.id })
+          navigation.navigate("Lecture", { lectureSession })
         }
       >
         <Text style={styles.date}>

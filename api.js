@@ -73,15 +73,20 @@ class SISApi {
     return res;
   }
 
-  /** Gets all lecture sessions for the cohort with staff info
+  /** Adds DRI info to lectureSession object.
+   * 
+   * Takes lectureSession: { id, lecture, title, description, cohort, dri, staff,
+   *            week_group, start_at, end_at, asset_set, status, api_url }
+   * 
+   * where dri is an API endpoint, e.g. http://domain/api/staff/elie
+   * 
    * Returns: { id, lecture, title, description, cohort, dri, staff,
    *            week_group, start_at, end_at, asset_set, status, api_url }
    *
    * where dri: { username, first_name, last_name, pronunciation, nickname,
    *              formal_name, pronoun, bio, photo, location, api_url }
    */
-  static async getLectureSessionByIdWithDRIInfo(id) {
-    const lectureSession = await SISApi.getLectureSessionById(id);
+  static async addDRIInfoToLectureSession(lectureSession) {
 
     const url = lectureSession.dri.match("staff(.*)")[0];
 
