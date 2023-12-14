@@ -76,22 +76,16 @@ class SISApi {
   /** Gets all lecture sessions for the cohort with staff info
    * Returns: { id, lecture, title, description, cohort, dri, staff,
    *            week_group, start_at, end_at, asset_set, status, api_url }
-   * 
+   *
    * where dri: { username, first_name, last_name, pronunciation, nickname,
    *              formal_name, pronoun, bio, photo, location, api_url }
    */
   static async getLectureSessionByIdWithDRIInfo(id) {
     const lectureSession = await SISApi.getLectureSessionById(id);
 
-    const headers = {
-      "content-type": "application/json",
-      Accept: "application/json",
-      Authorization: `Token ${SISApi.token}`
-    };
+    const url = lectureSession.dri.match("staff(.*)")[0];
 
-    const resp = await fetch(lectureSession.dri, { headers });
-
-    lectureSession.dri = await resp.json();
+    lectureSession.dri = await this.request(url);
 
     return lectureSession;
   }
@@ -112,7 +106,7 @@ class SISApi {
     if (upcoming) {
       const now = new Date();
 
-      responses = responses.filter((r) => new Date(r.start_at) > now);
+      responses = responses.filter((r) => new Date(r.end_at) > now);
     }
 
     return responses.sort(this._sortByDate);
@@ -130,7 +124,6 @@ class SISApi {
     }
     return comparison;
   }
-
 
   /** Gets token for user based on login
    * Takes: cohortId, username, password
