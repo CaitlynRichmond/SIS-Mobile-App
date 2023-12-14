@@ -1,4 +1,4 @@
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import {ActivityIndicator, View, FlatList, Text, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import SISApi from "./api";
 import LectureSessionCard from "./LectureSessionCard";
@@ -14,17 +14,13 @@ import LectureSessionCard from "./LectureSessionCard";
 export default function LectureSessionList({ navigation }) {
   const [lectureSessions, setLectureSessions] = useState(null);
 
-  // console.log("LectureSessionList rendering. lectureSessions=", lectureSessions);
-
   /** Get all lectureSessions from the API */
-
   async function fetchLectureSessions() {
     const lectureSessions = await SISApi.getDetailedLectureSessions(true);
     setLectureSessions(lectureSessions);
   }
 
   /** Effect for getting all companies on initial render. */
-
   useEffect(function fetchLectureSessionsWhenMounted() {
     fetchLectureSessions();
   }, []);
@@ -32,7 +28,7 @@ export default function LectureSessionList({ navigation }) {
   if (lectureSessions === null) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <ActivityIndicator size='large'/>
       </View>
     );
   }
@@ -42,12 +38,9 @@ export default function LectureSessionList({ navigation }) {
       <FlatList
         data={lectureSessions}
         renderItem={({ item }) => (
-          <LectureSessionCard 
-            lectureSession={item} 
-            navigate={navigate}/>
-          )}
+          <LectureSessionCard lectureSession={item} navigation={navigation} />
+        )}
         keyExtractor={(ls) => ls.id}
-        ListHeaderComponent={() => <Text style={styles.header}>Upcoming</Text>}
       />
     </View>
   );

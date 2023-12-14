@@ -10,8 +10,7 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-import { SelectList } from 'react-native-dropdown-select-list'
-
+import { SelectList } from "react-native-dropdown-select-list";
 
 /** */
 export default function LoginForm({ login }) {
@@ -19,7 +18,7 @@ export default function LoginForm({ login }) {
   const [password, setPassword] = useState("");
   const [cohort, setCohort] = useState("");
 
-  const [loginErrors, setLoginErrors] = useState([]);
+  const [loginErrors, setLoginErrors] = useState({});
 
   async function handleSubmit(evt) {
     try {
@@ -27,25 +26,18 @@ export default function LoginForm({ login }) {
     } catch (errors) {
       setLoginErrors(errors);
     }
-    // console.log(email, password, cohort)
-    // await login(email, password, cohort);
   }
-  console.log("Setting loginErrors=", loginErrors);
-  console.log("Setting cohort=", cohort);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {/* { loginErrors.length !== 0 && (
-        <View>
-          {loginErrors.map(error => <Text>{error}</Text>)}
-        </View>
-      )} */}
-
-      {loginErrors.non_field_errors !== 0 && (
+      <Image style={styles.image}
+        source={require('./assets/images/rithm-full.png')}
+      />
+      {loginErrors.non_field_errors && (
         <View>{<Text>{loginErrors.non_field_errors}</Text>}</View>
       )}
-        {loginErrors.username !== 0 && (
+      {loginErrors.username && (
         <View>{<Text>{loginErrors.username}</Text>}</View>
       )}
       <View style={styles.inputView}>
@@ -57,8 +49,7 @@ export default function LoginForm({ login }) {
           autoCapitalize="none"
         />
       </View>
-
-      {loginErrors.password !== 0 && (
+      {loginErrors.password && (
         <View>{<Text>{loginErrors.password}</Text>}</View>
       )}
       <View style={styles.inputView}>
@@ -71,27 +62,16 @@ export default function LoginForm({ login }) {
           autoCapitalize="none"
         />
       </View>
-
       <View style={styles.inputView}>
-        {/* <TextInput
-          style={styles.TextInput}
-          placeholder="Cohort"
-          placeholderTextColor="#003f5c"
-          onChangeText={(cohort) => setCohort(cohort)}
-        />
-      </View> */}
-        <SelectList 
+        <SelectList
           data={Object.keys(SISApi.COHORT_ID_TO_URL)}
           setSelected={(cohort) => setCohort(cohort)}
           search={false}
-          inputStyles={styles.TextInput}
-          dropdownStyles={{
-            backgroundColor: "white",
-            position: "absolute",
-            top: 40,
-            width: "100%",
-            zIndex: 999,
-          }}/>
+          boxStyles={styles.box}
+          dropdownStyles={styles.dropdown}
+          placeholder="Select Cohort"
+          placeholderTextColor="#003f5c"
+        />
       </View>
       <TouchableOpacity onPress={handleSubmit} style={styles.loginBtn}>
         <Text>LOGIN</Text>
@@ -100,34 +80,45 @@ export default function LoginForm({ login }) {
   );
 }
 const styles = StyleSheet.create({
+  box: {
+    borderWidth: 0,
+  },
   image: {
-    marginBottom: 40,
+    alignSelf: "center",
+    marginBottom: 10
+
+  },
+
+  dropdown: {
+    backgroundColor: "#fbaaaa",
+    width: "100%",
+    marginTop: 55,
+    fontSize: 12,
+    position: "absolute",
+    zIndex: 999,
   },
   inputView: {
     backgroundColor: "#fbaaaa",
     borderRadius: 30,
+    marginVertical: 10,
     width: 250,
     height: 45,
-    marginBottom: 20,
     justifyContent: "center",
   },
   TextInput: {
     height: 50,
     flex: 1,
-    padding: 10,
     marginLeft: 20,
   },
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-  },
   loginBtn: {
+    marginVertical: 10,
     borderRadius: 25,
     height: 50,
+    alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
     width: 125,
-    marginTop: 40,
     backgroundColor: "#f86161",
+    zIndex: -1,
   },
 });

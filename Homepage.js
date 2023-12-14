@@ -4,11 +4,12 @@ import { StyleSheet, View } from "react-native";
 /** Presentational component for the home page */
 
 export default function Homepage({ navigation }) {
+  // console.log("Homepage rendering");
   return (
     <View style={styles.container}>
       <LectureSessionList navigation={navigation} />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

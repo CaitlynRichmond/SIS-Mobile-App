@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { Pressable, View, Text, StyleSheet, Button } from "react-native";
 
 /** Presentational component for a LectureSessionCard
  *
@@ -8,22 +8,29 @@ import { View, Text, StyleSheet, Button } from "react-native";
  * LectureSessionList -> LectureSessionCard
  */
 
-export default function LectureSessionCard({ lectureSession, navigate }) {
-  const options = { month: "short", day: "numeric" };
+export default function LectureSessionCard({ lectureSession, navigation }) {
+  const options = {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
   return (
     <View style={styles.item}>
-      <Text style={styles.date}>
-        {new Date(lectureSession.start_at).toLocaleDateString(
-          undefined,
-          options
-        )}
-      </Text>
-      <Text style={styles.title}>{lectureSession.title}</Text>
-      <Text style={styles.description}>{lectureSession.description}</Text>
-      <Button
-        title="Detail"
-        onPress={() => navigation.navigate('Lecture')}
-      />
+      <Pressable
+        onPress={() =>
+          navigation.navigate("Lecture", { id: lectureSession.id })
+        }
+      >
+        <Text style={styles.date}>
+          {new Date(lectureSession.start_at).toLocaleDateString(
+            undefined,
+            options
+          )}
+        </Text>
+        <Text style={styles.title}>{lectureSession.title}</Text>
+        <Text style={styles.description}>{lectureSession.description}</Text>
+      </Pressable>
     </View>
   );
 }
@@ -31,6 +38,9 @@ export default function LectureSessionCard({ lectureSession, navigate }) {
 const styles = StyleSheet.create({
   date: {
     fontSize: 16,
+    color: "white",
+  },
+  button: {
     color: "white",
   },
   item: {
@@ -46,5 +56,6 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
+    fontFamily: "Source-Serif",
   },
 });

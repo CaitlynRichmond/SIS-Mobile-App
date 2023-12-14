@@ -1,5 +1,9 @@
 const COHORT_ID_TO_URL = {
   R99: process.env.EXPO_PUBLIC_API_URL,
+  R88: "blah",
+  R77: "lets try this",
+  R34: "https://r34.students.rithmschool.com",
+  R35: "https://r35.students.rithmschool.com",
 };
 
 /** API Class.
@@ -13,7 +17,7 @@ const COHORT_ID_TO_URL = {
 class SISApi {
   static BASE_URL = process.env.EXPO_PUBLIC_API_URL + "/api";
 
-  static token = null;
+  static token = "null";
 
   static COHORT_ID_TO_URL = COHORT_ID_TO_URL;
 
@@ -27,7 +31,7 @@ class SISApi {
 
     if (endpoint !== "-token") {
       headers.Authorization = `Token ${SISApi.token}`;
-    } 
+    }
 
     url.search = method === "GET" ? new URLSearchParams(data).toString() : "";
 
@@ -75,7 +79,6 @@ class SISApi {
    */
   static async getDetailedLectureSessions(upcoming = false) {
     let lectureSessions = await this.getLectureSessions();
-    // lectureSessions = lectureSessions.filter((ls) => ls.id === 5);
 
     const lectureSessionDetailPromises = lectureSessions.map((ls) =>
       this.getLectureSessionById(ls.id)
@@ -109,74 +112,13 @@ class SISApi {
    * Takes: cohortId, username, password
    */
   static async getToken(cohort, username, password) {
-    console.log("logging in, username=", username);
-    console.log("logging in, password=", password);
     this.BASE_URL = COHORT_ID_TO_URL[cohort] + "/api";
-    console.log("BASE_URL", this.BASE_URL);
     const info = { username, password };
     const res = await this.request(`-token`, (data = info), (method = "POST"));
-    console.log("THE RESPONSE HERE", res);
+
     this.token = res.token;
 
     return res.token;
   }
-  //   /** Get details on all companies that match search*/
-  //   static async getCompanies(search) {
-  //     let res = await this.request(
-  //       `companies`,
-  //       search ? { nameLike: search } : {}
-  //     );
-
-  //     return res.companies;
-  //   }
-
-  //   /** Get details on all jobs that match search*/
-  //   static async getJobs(search) {
-  //     let res = await this.request(`jobs`, search ? { title: search } : {});
-
-  //     return res.jobs;
-  //   }
-
-  //   /**Login and returns token or errors if bad username/password */
-  //   static async login(username, password) {
-  //     let res = await this.request(`auth/token`, { username, password }, "POST");
-
-  //     return res.token;
-  //   }
-
-  //   /**Signup and returns token or errors if bad inputs */
-
-  //   static async signup(username, password, firstName, lastName, email) {
-  //     let res = await this.request(
-  //       `auth/register`,
-  //       { username, password, firstName, lastName, email },
-  //       "POST"
-  //     );
-
-  //     return res.token;
-  //   }
-
-  //   /**Get information on user */
-  //   static async getUser(username) {
-  //     let res = await this.request(`users/${username}`);
-
-  //     return res.user;
-  //   }
-
-  //   /**Patch user info */
-  //   static async updateUser(formData) {
-  //     const username = formData.username;
-  //     delete formData.username;
-
-  //     let res = await this.request(`users/${username}`, { ...formData }, "PATCH");
-
-  //     return res.user;
-  //   }
-
-  //   /**Applies to job */
-  //   static async applyToJob(username, jobId) {
-  //     await this.request(`users/${username}/jobs/${jobId}`, {}, "POST");
-  //   }
-  // }
 }
 export default SISApi;
