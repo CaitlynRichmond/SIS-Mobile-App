@@ -9,7 +9,7 @@ import SISApi from "./api";
  */
 
 export default function LectureDetail({ route, navigation }) {
-  
+
   const [lecture, setLecture] = useState(null);
 
   const startDate = {
@@ -22,11 +22,10 @@ export default function LectureDetail({ route, navigation }) {
 
   async function fetchDRIInfo() {
     let { lectureSession } = route.params;
-    console.log("BEFORE lectureSession=", lectureSession)
-    if (typeof lectureSession.dri === String) {
+
+    if (typeof lectureSession.dri === "string") {
       lectureSession = await SISApi.addDRIInfoToLectureSession(lectureSession);
     }
-    console.log("BEFORE lectureSession=", lectureSession)
     setLecture(lectureSession);
   }
 
