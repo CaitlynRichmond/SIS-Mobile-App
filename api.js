@@ -53,6 +53,9 @@ class SISApi {
 
   // Individual API routes
 
+
+  /* LECTURE SESSIONS ***************************************/
+
   /** Gets all lecture sessions for the cohort
    * Returns: { count, next, previous, results }
    * where results: { id, title, status, api_url }
@@ -63,7 +66,8 @@ class SISApi {
     return res.results;
   }
 
-  /** Gets all lecture sessions for the cohort
+  /** Gets lecture session details.
+   * Takes id
    * Returns: { id, lecture, title, description, cohort, dri, staff,
    *            week_group, start_at, end_at, asset_set, status, api_url }
    */
@@ -114,8 +118,67 @@ class SISApi {
       responses = responses.filter((r) => new Date(r.end_at) > now);
     }
 
-    return responses.sort(this._sortByDate);
+    return responses;
   }
+
+  /* Events ***************************************/
+
+  /** Gets all events for the cohort
+   * Returns: { count, next, previous, results }
+   * where results: { title, status, api_url }
+   */
+  static async getEvents() {
+    const res = await this.request("events/");
+
+    return res.results;
+  }
+
+  /** Gets all events for the cohort with details
+   * Takes a url
+   * Returns: { id, title, description, exercise, cohort, dri, week_group, 
+   *            status, api_url, asset_set }
+   */
+  static async getEventDetailFromUrl(url) {
+    const endpoint = url.match("events(.*)")[0];
+
+    res = await this.request(endpoint);
+
+    return res;
+  }
+
+  /** Gets all event details
+   * Returns: [{ id, slug, title, description, cohort, dri, start_at, end_at, 
+   *             week_group, staff, location, week_group, status, api_url, 
+   *             asset_set }, ...]
+   */
+  static async getDetailedEvents(upcoming = false) {
+    let events = await this.getEvents();
+
+    const eventDetailPromises = events.map((e) =>
+      this.getEventDetailFromUrl(e.api_url)
+    );
+
+    let responses = await Promise.all(eventDetailPromises);
+
+    if (upcoming) {
+      const now = new Date();
+
+      responses = responses.filter((r) => new Date(r.end_at) > now);
+    }
+
+    return responses;
+  }
+
+  /* HOMEPAGE ***********************************/
+
+  static async getHomepageItems(upcoming = false) {
+    const lectureSessions = await getDetailedLectureSessions(upcoming);
+    const events = await getDetailedEvents(upcoming);
+
+    const items = lectureSessions.concat(events);
+    return items.sort(this._sortByDate);
+  }
+
 
   static _sortByDate(a, b) {
     const aDate = new Date(a.start_at);
@@ -129,6 +192,9 @@ class SISApi {
     }
     return comparison;
   }
+
+
+  /* AUTH ***************************************/
 
   /** Gets token for user based on login
    * Takes: cohortId, username, password
