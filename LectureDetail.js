@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
+import { ActivityIndicator, StyleSheet, View, Text, Image } from "react-native";
 import SISApi from "./api";
 
 /** Lecture detail logical component
@@ -21,7 +21,8 @@ export default function LectureDetail({ route, navigation }) {
   const endDate = { hour: "numeric", minute: "numeric" };
 
   async function fetchLecture() {
-    const lectureSession = await SISApi.getLectureSessionById(id);
+    const lectureSession = await SISApi.getLectureSessionByIdWithDRIInfo(id);
+    console.log(lectureSession.dri);
     setLecture(lectureSession);
   }
   console.log(lecture)
@@ -48,6 +49,12 @@ export default function LectureDetail({ route, navigation }) {
         {new Date(lecture.start_at).toLocaleString(undefined, startDate)} -{" "}
         {new Date(lecture.end_at).toLocaleString(undefined, endDate)}
       </Text>
+      <Text>
+        Instructor: {lecture.dri.first_name}
+      </Text>
+      <Image
+        source={{ url: lecture.dri.photo }}
+      />
     </View>
   );
 }
