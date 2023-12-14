@@ -44,9 +44,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
-          name={`Welcome ${info.cohort}`} 
-          component={Homepage} 
+        <Stack.Screen
+          name={`Welcome ${info.cohort}`}
+          component={Homepage}
           options={({ navigationBarColor, route }) => ({
             headerRight: () => (
               <Button title="Logout" onPress={() => setInfo({
@@ -55,7 +55,7 @@ export default function App() {
               })}/>
             )
           })}/>
-        <Stack.Screen name="Lecture" component={LectureDetail} />
+        <Stack.Screen name="Details" component={LectureDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

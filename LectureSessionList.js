@@ -16,7 +16,7 @@ export default function LectureSessionList({ navigation }) {
 
   /** Get all lectureSessions from the API */
   async function fetchLectureSessions() {
-    const lectureSessions = await SISApi.getDetailedLectureSessions(true);
+    const lectureSessions = await SISApi.getHomepageItems(true);
     setLectureSessions(lectureSessions);
   }
 

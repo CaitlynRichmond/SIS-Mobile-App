@@ -18,9 +18,7 @@ export default function LectureSessionCard({ lectureSession, navigation }) {
   return (
     <View style={styles.item}>
       <Pressable
-        onPress={() =>
-          navigation.navigate("Lecture", { lectureSession })
-        }
+        onPress={() => navigation.navigate("Details", { lectureSession })}
       >
         <Text style={styles.date}>
           {new Date(lectureSession.start_at).toLocaleDateString(

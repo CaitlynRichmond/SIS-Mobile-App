@@ -53,7 +53,6 @@ class SISApi {
 
   // Individual API routes
 
-
   /* LECTURE SESSIONS ***************************************/
 
   /** Gets all lecture sessions for the cohort
@@ -78,12 +77,12 @@ class SISApi {
   }
 
   /** Adds DRI info to lectureSession object.
-   * 
+   *
    * Takes lectureSession: { id, lecture, title, description, cohort, dri, staff,
    *            week_group, start_at, end_at, asset_set, status, api_url }
-   * 
+   *
    * where dri is an API endpoint, e.g. http://domain/api/staff/elie
-   * 
+   *
    * Returns: { id, lecture, title, description, cohort, dri, staff,
    *            week_group, start_at, end_at, asset_set, status, api_url }
    *
@@ -91,8 +90,14 @@ class SISApi {
    *              formal_name, pronoun, bio, photo, location, api_url }
    */
   static async addDRIInfoToLectureSession(lectureSession) {
-
     const url = lectureSession.dri.match("staff(.*)")[0];
+
+    if (url.includes("sophie")) {
+      lectureSession.dri = {};
+      lectureSession.dri.photo = (
+        "https://rithm-students-media.s3.us-west-1.amazonaws.com/CACHE/images/user_photos/Sophie/f485ea5f-1091-4c2c-aaab-4ca681f5b0cb-Profile/50c318e46bc4dbebbe91731c3bf76640.jpg");
+      return lectureSession;
+    }
 
     lectureSession.dri = await this.request(url);
 
@@ -129,26 +134,28 @@ class SISApi {
    */
   static async getEvents() {
     const res = await this.request("events/");
+    console.log("getEvents", res.results);
 
     return res.results;
   }
 
   /** Gets all events for the cohort with details
    * Takes a url
-   * Returns: { id, title, description, exercise, cohort, dri, week_group, 
+   * Returns: { id, title, description, exercise, cohort, dri, week_group,
    *            status, api_url, asset_set }
    */
   static async getEventDetailFromUrl(url) {
     const endpoint = url.match("events(.*)")[0];
 
     res = await this.request(endpoint);
+    console.log("getEventDetailFromUrl", res);
 
     return res;
   }
 
   /** Gets all event details
-   * Returns: [{ id, slug, title, description, cohort, dri, start_at, end_at, 
-   *             week_group, staff, location, week_group, status, api_url, 
+   * Returns: [{ id, slug, title, description, cohort, dri, start_at, end_at,
+   *             week_group, staff, location, week_group, status, api_url,
    *             asset_set }, ...]
    */
   static async getDetailedEvents(upcoming = false) {
@@ -172,13 +179,12 @@ class SISApi {
   /* HOMEPAGE ***********************************/
 
   static async getHomepageItems(upcoming = false) {
-    const lectureSessions = await getDetailedLectureSessions(upcoming);
-    const events = await getDetailedEvents(upcoming);
+    const lectureSessions = await this.getDetailedLectureSessions(upcoming);
+    const events = await this.getDetailedEvents(upcoming);
 
     const items = lectureSessions.concat(events);
     return items.sort(this._sortByDate);
   }
-
 
   static _sortByDate(a, b) {
     const aDate = new Date(a.start_at);
@@ -192,7 +198,6 @@ class SISApi {
     }
     return comparison;
   }
-
 
   /* AUTH ***************************************/
 
