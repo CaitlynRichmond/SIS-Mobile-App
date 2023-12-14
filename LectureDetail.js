@@ -36,7 +36,7 @@ export default function LectureDetail({ route, navigation }) {
 
   if (lecture === null) {
     return (
-      <View>
+      <View style={styles.container}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -58,6 +58,12 @@ export default function LectureDetail({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   date: {
     fontSize: 16,
     color: "white",

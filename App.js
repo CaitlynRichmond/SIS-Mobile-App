@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { useFonts } from "expo-font";
 import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -44,7 +44,17 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name={`Welcome ${info.cohort}`} component={Homepage} />
+        <Stack.Screen 
+          name={`Welcome ${info.cohort}`} 
+          component={Homepage} 
+          options={({ navigationBarColor, route }) => ({
+            headerRight: () => (
+              <Button title="Logout" onPress={() => setInfo({
+                token: null,
+                cohort: null,
+              })}/>
+            )
+          })}/>
         <Stack.Screen name="Lecture" component={LectureDetail} />
       </Stack.Navigator>
     </NavigationContainer>
